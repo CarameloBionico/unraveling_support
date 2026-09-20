@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Suporte desfiável · Protótipo 01</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#101719;color:#eaf1ec}*{box-sizing:border-box}body{margin:0}main{display:grid;grid-template-columns:330px 1fr;min-height:100vh}aside{padding:30px 24px;background:#172124;border-right:1px solid #344044}h1{font-size:30px;line-height:1.1;margin:12px 0 20px}h2{font-size:15px;margin:28px 0 10px}p{font-size:14px;color:#b7c8c9;line-height:1.6}.eyebrow{color:#9fe8ac;letter-spacing:2px;font-size:11px}select,button,a.download{font:inherit;border:1px solid #4c6467;background:#243437;color:#effbf5;border-radius:8px;padding:10px;cursor:pointer}select{width:100%}button:hover,a.download:hover{background:#365054}label{display:block;margin:14px 0;font-size:14px}input[type=range]{width:100%;accent-color:#a6e7b3}input[type=checkbox]{accent-color:#a6e7b3}a{color:#adefc1}.download{display:block;text-align:center;text-decoration:none;margin:9px 0;font-size:13px!important}.legend{display:flex;align-items:center;gap:9px;font-size:13px;margin:9px 0}.dot{width:11px;height:11px;border-radius:3px}.stage{position:relative;min-height:680px;height:100vh;overflow:hidden}canvas{width:100%;height:100%;touch-action:none;display:block}.toolbar{position:absolute;top:22px;left:22px;display:flex;gap:8px}.hint{position:absolute;bottom:20px;left:25px;right:25px;font-size:12px;color:#adbfbe;pointer-events:none}.badge{position:absolute;top:78px;left:25px;font-size:12px;color:#bcd4c7}.notice{border-left:3px solid #edc789;padding-left:12px;font-size:12px}.metrics{font-size:13px;color:#d4e9de;line-height:1.8}@media(max-width:760px){main{grid-template-columns:1fr}aside{border-right:0}.stage{height:70vh;min-height:420px}}
+@media(max-width:760px){.stage{grid-row:1;height:58vh;min-height:380px}aside{grid-row:2}.toolbar{top:12px;left:12px;gap:5px}.toolbar button{padding:8px;font-size:12px}.badge{top:58px;left:15px}.hint{left:15px;font-size:11px}}
+</style></head><body><main><aside>
+<div class="eyebrow">EXPERIMENTO / 01</div><h1>Uma sanfona<br>em três dimensões.</h1>
+<p>Cordões grossos ondulam lateralmente e na vertical. Ligações menores unem os níveis e devem se romper durante a puxada.</p>
+<h2>Ligações entre cordões</h2><select id="variant"><option value="A_fina">A · fina — 0,45 mm</option><option value="B_media" selected>B · média — 0,60 mm</option><option value="C_forte">C · forte — 0,80 mm</option></select>
+<label><input id="specimen" type="checkbox"> Mostrar peça de teste sobre o suporte</label>
+<label><input id="single" type="checkbox"> Isolar uma fileira de cordões</label>
+<label for="levels">Níveis visíveis: <span id="levelValue">4</span></label><input id="levels" type="range" min="1" max="4" value="4">
+<div class="legend"><span class="dot" style="background:#98dbae"></span>Cordões · cada cor é um nível</div>
+<div class="legend"><span class="dot" style="background:#f3a166"></span>Ligações que devem ceder</div>
+<div class="legend"><span class="dot" style="background:#afbac8"></span>Peça de teste independente</div>
+<h2>Dimensões iniciais</h2><div class="metrics" id="metrics"></div>
+<a class="download" id="supportDownload">Baixar suporte isolado · STL</a><a class="download" id="assemblyDownload">Baixar suporte + peça · STL</a>
+<p class="notice">Protótipo sem validação física. A vista mostra a geometria de projeto; não simula flexão, quebra, trajetória do bico ou impressão.</p>
+<p><a href="README.md">Instruções e critérios do teste</a></p></aside>
+<section class="stage"><canvas id="view" aria-label="Modelo 3D interativo do suporte desfiável"></canvas><div class="toolbar"><button data-view="iso">Perspectiva</button><button data-view="side">Lateral</button><button data-view="top">Superior</button><button data-view="front">Frontal</button></div><div class="badge" id="status"></div><div class="hint">Arraste para girar · roda do mouse para aproximar · espaços vazios entre cordões são intencionais</div></section></main>
+<script src="output/preview-data.js"></script><script>
+'use strict';
+const canvas=document.querySelector('#view'),ctx=canvas.getContext('2d');
+const variant=document.querySelector('#variant'),specimen=document.querySelector('#specimen'),single=document.querySelector('#single'),levels=document.querySelector('#levels');
+let yaw=-0.65,pitch=0.47,zoom=1,drag=null,triangles=[];
+const colors={base:'#43606a',anchor:'#69857d',neck:'#f3a166',cord_0:'#79bd96',cord_1:'#a8dec0',cord_2:'#62b1b6',cord_3:'#aed6e6',specimen:'#afbac8'};
+const c=window.MODEL.config,center=[c.periods*c.pitch/2,(c.rows-1)*c.row_pitch/2,(c.base_height+c.cord_height+(c.levels-1)*(c.rise+c.cord_height+c.neck_gap)+c.rise)/2];
+levels.max=c.levels;levels.value=c.levels;
+document.querySelector('#metrics').innerHTML=`Bico considerado: ${c.nozzle.toFixed(1)} mm<br>Cordão: ${c.cord_width} × ${c.cord_height} mm<br>${c.rows} fileiras · ${c.levels} níveis · passo ${c.pitch} mm<br>Camada prevista: ${c.layer} mm`;
+function rebuild(){
+ const data=window.MODEL.variants[variant.value];triangles=[];
+ for(const part of data.parts){
+  if(part.kind==='specimen'&&!specimen.checked)continue;
+  if(part.kind.startsWith('cord_')&&+part.kind.split('_')[1]>=+levels.value)continue;
+  if(part.kind==='neck'&&Math.max(...part.v.map(v=>v[2]))>c.base_height+c.cord_height+(+levels.value-1)*(c.rise+c.cord_height+c.neck_gap)+c.rise)continue;
+  if(single.checked&&part.kind!=='base'&&part.kind!=='specimen'&&part.v.reduce((s,v)=>s+v[1],0)/part.v.length>c.row_pitch/2)continue;
+  for(const f of part.f){triangles.push({v:f.map(i=>part.v[i]),color:colors[part.kind]||'#98dbae'});}
+ }
+ document.querySelector('#levelValue').textContent=levels.value;
+ document.querySelector('#status').textContent=`Variante ${variant.value[0]} · ligações de ${data.neck.toFixed(2)} mm · geometria em escala`;
+ for(const [id,suffix] of [['supportDownload','suporte'],['assemblyDownload','conjunto']]){const a=document.getElementById(id);a.href=`output/${variant.value}_${suffix}.stl`;a.download='';}
+ draw();
+}
+function transform(v){let x=v[0]-center[0],y=v[1]-center[1],z=v[2]-center[2];let a=x*Math.cos(yaw)-y*Math.sin(yaw),b=x*Math.sin(yaw)+y*Math.cos(yaw);return[a,b*Math.sin(pitch)+z*Math.cos(pitch),b*Math.cos(pitch)-z*Math.sin(pitch)];}
+function shade(hex,f){let n=parseInt(hex.slice(1),16);return `rgb(${Math.round((n>>16)*f)},${Math.round(((n>>8)&255)*f)},${Math.round((n&255)*f)})`;}
+function draw(){
+ const r=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;canvas.width=r.width*dpr;canvas.height=r.height*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,r.width,r.height);
+ const scale=Math.min(r.width/40,(r.height-120)/28)*zoom;
+ const projected=triangles.map(t=>{const v=t.v.map(transform);return{v,color:t.color,depth:v.reduce((s,p)=>s+p[2],0)/3};}).sort((a,b)=>b.depth-a.depth);
+ for(const t of projected){const [a,b,c]=t.v;let u=b.map((n,i)=>n-a[i]),v=c.map((n,i)=>n-a[i]),normal=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],length=Math.hypot(...normal)||1;let light=.53+.47*Math.abs((normal[0]*.25+normal[1]*.65-normal[2]*.72)/length);ctx.fillStyle=shade(t.color,light);ctx.beginPath();t.v.forEach((p,i)=>{const x=r.width/2+p[0]*scale,y=r.height/2-p[1]*scale;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();ctx.fill();}
+ const origin=[55,r.height-65];for(const [axis,col,v] of [['X','#e69b83',[3,0,0]],['Y','#8acdac',[0,3,0]],['Z','#8db9e4',[0,0,3]]]){const p=transform(v.map((n,i)=>n+center[i]));ctx.strokeStyle=col;ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(...origin);ctx.lineTo(origin[0]+p[0]*11,origin[1]-p[1]*11);ctx.stroke();ctx.font='12px system-ui';ctx.fillText(axis,origin[0]+p[0]*14,origin[1]-p[1]*14);}
+}
+canvas.onpointerdown=e=>{drag=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId)};canvas.onpointerup=()=>drag=null;canvas.onpointercancel=()=>drag=null;canvas.onpointermove=e=>{if(!drag)return;yaw+=(e.clientX-drag[0])*.009;pitch=Math.max(-1.57,Math.min(1.57,pitch+(e.clientY-drag[1])*.009));drag=[e.clientX,e.clientY];draw()};canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.4,Math.min(3,zoom*Math.exp(-e.deltaY*.001)));draw()},{passive:false});
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{[yaw,pitch]=({iso:[-.65,.47],side:[0,0],top:[0,Math.PI/2],front:[Math.PI/2,0]})[b.dataset.view];zoom=1;draw()});
+[variant,specimen,single,levels].forEach(e=>e.oninput=rebuild);window.addEventListener('resize',draw);rebuild();
+</script></body></html>

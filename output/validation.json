@@ -1,0 +1,232 @@
+{
+  "config": {
+    "nozzle": 0.4,
+    "layer": 0.2,
+    "cord_width": 0.9,
+    "cord_height": 0.8,
+    "pitch": 8.0,
+    "rise": 3.2,
+    "lateral": 0.65,
+    "rows": 4,
+    "row_pitch": 3.0,
+    "levels": 4,
+    "periods": 3,
+    "neck_gap": 0.4,
+    "base_height": 0.4,
+    "roof_gap": 0.2,
+    "roof_height": 1.2
+  },
+  "status": "Geometry validated; physical printing and unraveling NOT validated.",
+  "variants": {
+    "A_fina": {
+      "neck_width_mm": 0.45,
+      "top_z": 17.6,
+      "roof_z": 17.8,
+      "neck_count": 40,
+      "support": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 1,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -0.8,
+            -1.9,
+            0.0
+          ],
+          [
+            24.8,
+            10.9,
+            17.6
+          ]
+        ],
+        "volume_mm3": 412.261,
+        "triangles": 9804
+      },
+      "specimen": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 1,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -2.4,
+            -1.9,
+            0.0
+          ],
+          [
+            26.4,
+            10.9,
+            19.0
+          ]
+        ],
+        "volume_mm3": 989.184,
+        "triangles": 46
+      },
+      "assembled": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 2,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -2.4,
+            -1.9,
+            0.0
+          ],
+          [
+            26.4,
+            10.9,
+            19.0
+          ]
+        ],
+        "volume_mm3": 1401.445,
+        "triangles": 9850
+      },
+      "support_specimen_intersection_mm3": 0.0
+    },
+    "B_media": {
+      "neck_width_mm": 0.6,
+      "top_z": 17.6,
+      "roof_z": 17.8,
+      "neck_count": 40,
+      "support": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 1,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -0.8,
+            -1.9,
+            0.0
+          ],
+          [
+            24.8,
+            10.9,
+            17.6
+          ]
+        ],
+        "volume_mm3": 415.411,
+        "triangles": 9804
+      },
+      "specimen": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 1,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -2.4,
+            -1.9,
+            0.0
+          ],
+          [
+            26.4,
+            10.9,
+            19.0
+          ]
+        ],
+        "volume_mm3": 989.184,
+        "triangles": 46
+      },
+      "assembled": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 2,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -2.4,
+            -1.9,
+            0.0
+          ],
+          [
+            26.4,
+            10.9,
+            19.0
+          ]
+        ],
+        "volume_mm3": 1404.595,
+        "triangles": 9850
+      },
+      "support_specimen_intersection_mm3": 0.0
+    },
+    "C_forte": {
+      "neck_width_mm": 0.8,
+      "top_z": 17.6,
+      "roof_z": 17.8,
+      "neck_count": 40,
+      "support": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 1,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -0.8,
+            -1.9,
+            0.0
+          ],
+          [
+            24.8,
+            10.9,
+            17.6
+          ]
+        ],
+        "volume_mm3": 421.535,
+        "triangles": 10412
+      },
+      "specimen": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 1,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -2.4,
+            -1.9,
+            0.0
+          ],
+          [
+            26.4,
+            10.9,
+            19.0
+          ]
+        ],
+        "volume_mm3": 989.184,
+        "triangles": 46
+      },
+      "assembled": {
+        "watertight": true,
+        "winding_consistent": true,
+        "positive_volume": true,
+        "components": 2,
+        "degenerate_faces": 0,
+        "bounds_mm": [
+          [
+            -2.4,
+            -1.9,
+            0.0
+          ],
+          [
+            26.4,
+            10.9,
+            19.0
+          ]
+        ],
+        "volume_mm3": 1410.719,
+        "triangles": 10458
+      },
+      "support_specimen_intersection_mm3": 0.0
+    }
+  }
+}

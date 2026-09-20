@@ -1,0 +1,17 @@
+{
+  "nozzle": 0.4,
+  "layer": 0.2,
+  "cord_width": 0.9,
+  "cord_height": 0.8,
+  "pitch": 8.0,
+  "rise": 3.2,
+  "lateral": 0.65,
+  "rows": 4,
+  "row_pitch": 3.0,
+  "levels": 4,
+  "periods": 3,
+  "neck_gap": 0.4,
+  "base_height": 0.4,
+  "roof_gap": 0.2,
+  "roof_height": 1.2
+}
