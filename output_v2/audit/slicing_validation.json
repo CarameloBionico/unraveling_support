@@ -1,0 +1,91 @@
+{
+  "note": "Generic Cura geometry audit, not validated printer G-code.",
+  "variants": {
+    "A_fina": {
+      "layer_geometry": {
+        "sampled_layers": 88,
+        "unsupported_island_birth_z_mm": [],
+        "scope": "Each island overlaps the preceding layer; not a full overhang or toolpath simulation."
+      },
+      "cura": {
+        "extruding_segments": 14660,
+        "neck_layer_samples": 80,
+        "missing_neck_layer_samples": [],
+        "overlapping_face_warning": false,
+        "empty_layer_warnings": []
+      },
+      "cura_assembly": {
+        "extruding_segments": 16539,
+        "overlapping_face_warning": false,
+        "empty_layer_warnings": []
+      }
+    },
+    "B_media": {
+      "layer_geometry": {
+        "sampled_layers": 88,
+        "unsupported_island_birth_z_mm": [],
+        "scope": "Each island overlaps the preceding layer; not a full overhang or toolpath simulation."
+      },
+      "cura": {
+        "extruding_segments": 14662,
+        "neck_layer_samples": 80,
+        "missing_neck_layer_samples": [],
+        "overlapping_face_warning": false,
+        "empty_layer_warnings": []
+      },
+      "cura_assembly": {
+        "extruding_segments": 16541,
+        "overlapping_face_warning": false,
+        "empty_layer_warnings": []
+      }
+    },
+    "C_forte": {
+      "layer_geometry": {
+        "sampled_layers": 88,
+        "unsupported_island_birth_z_mm": [],
+        "scope": "Each island overlaps the preceding layer; not a full overhang or toolpath simulation."
+      },
+      "cura": {
+        "extruding_segments": 14621,
+        "neck_layer_samples": 80,
+        "missing_neck_layer_samples": [],
+        "overlapping_face_warning": false,
+        "empty_layer_warnings": []
+      },
+      "cura_assembly": {
+        "extruding_segments": 16500,
+        "overlapping_face_warning": false,
+        "empty_layer_warnings": []
+      }
+    }
+  },
+  "settings": {
+    "machine_width": 220,
+    "machine_depth": 220,
+    "machine_height": 250,
+    "machine_nozzle_size": 0.4,
+    "material_diameter": 1.75,
+    "layer_height": 0.2,
+    "layer_height_0": 0.2,
+    "line_width": 0.4,
+    "wall_line_width": 0.4,
+    "wall_line_width_0": 0.4,
+    "wall_line_width_x": 0.4,
+    "skin_line_width": 0.4,
+    "infill_line_width": 0.4,
+    "wall_line_count": 2,
+    "fill_perimeter_gaps": "everywhere",
+    "fill_outline_gaps": "true",
+    "filter_out_tiny_gaps": "false",
+    "minimum_polygon_circumference": 0,
+    "meshfix_maximum_resolution": 0.05,
+    "infill_sparse_density": 100,
+    "infill_line_distance": 0.4,
+    "top_layers": 4,
+    "bottom_layers": 4,
+    "support_enable": "false",
+    "adhesion_type": "none",
+    "machine_start_gcode": "",
+    "machine_end_gcode": ""
+  }
+}

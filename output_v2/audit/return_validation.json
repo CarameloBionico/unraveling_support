@@ -1,0 +1,31 @@
+{
+  "v1_cord_components_without_base_or_necks": 16,
+  "v2_cord_components_without_base_or_necks": 1,
+  "chain": {
+    "chunks": 31,
+    "connected_components": 1,
+    "endpoints": 2,
+    "unexpected_contacts": [],
+    "missing_contacts": [],
+    "scope": "Full-section cord only, without base, anchors or weak necks."
+  },
+  "scope": "Nearby extrusion on each sampled return centerline; not a tensile or stability test.",
+  "maximum_distance_to_extrusion_center_mm": 0.3,
+  "variants": {
+    "A_fina": {
+      "return_samples": 687,
+      "missing_samples": [],
+      "worst_distance_mm": 0.247
+    },
+    "B_media": {
+      "return_samples": 687,
+      "missing_samples": [],
+      "worst_distance_mm": 0.247
+    },
+    "C_forte": {
+      "return_samples": 687,
+      "missing_samples": [],
+      "worst_distance_mm": 0.247
+    }
+  }
+}

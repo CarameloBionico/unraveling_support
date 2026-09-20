@@ -1,77 +1,75 @@
-# Suporte desfiável — protótipo 01
+# Suporte desfiável — protótipo 02
 
-Experimento para PETG, um bico de **0,4 mm**, um material e camadas de **0,2 mm**. O diâmetro de 0,4 mm foi assumido a partir da conversa; se o bico for realmente de 4 mm, estes modelos não se aplicam.
+Revisão para **PETG, bico de 0,4 mm, um único material e camada de 0,2 mm**. A primeira versão está preservada em `generate.py`, `output/`, `v1.html` e `README_v1.md`.
 
-O cordão tem seção nominal de **0,9 mm na direção Y × 0,8 mm na direção Z** e é construído por várias camadas convencionais. Não depende de extrusão não planar. Sua trajetória ondula em X/Y e em altura. Os níveis alternam picos e vales e são unidos por pequenos pescoços que devem romper antes dos cordões durante a remoção. Essa sequência de ruptura ainda é uma hipótese, não um resultado medido.
+## O que mudou
 
-## Arquivos para experimentar
+Na primeira versão, cada sanfona era uma fileira independente, unida às demais pela base. Mesmo dentro de uma fileira, os cordões dos diferentes níveis dependiam de ligações fracas. Sem base e ligações, sobravam **16 cordões separados**.
 
-Abra `index.html` no navegador; funciona também sem servidor e sem internet. O visualizador permite girar, selecionar a variante, isolar uma fileira, esconder níveis e mostrar a peça de teste. A visualização mostra os componentes de construção coloridos; os STLs de suporte têm as uniões booleanas concluídas.
+Agora o cordão percorre uma fileira, faz um retorno horizontal de 180 graus, volta pela próxima e atravessa a largura do suporte. Ao completar o andar, uma curva vertical leva ao próximo, onde o percurso continua em sentido inverso. São **12 retornos horizontais e 3 curvas verticais**, mantendo a seção nominal do cordão de **0,9 × 0,8 mm**. O caminho total tem aproximadamente **598 mm**.
 
-| Variante | Seção nominal da ligação | Arquivo de suporte | Arquivo com peça de teste |
+O cordão principal continua sendo **um único sólido mesmo sem base, ancoragens e ligações fracas**. A auditoria geométrica também verifica que os 31 trechos construtivos formam uma cadeia aberta, com duas extremidades, sem bifurcações, contatos extras ou lacunas. Não depende de uma lingueta nem exige uma única puxada: pode-se agarrar qualquer região acessível e recomeçar caso o cordão rompa.
+
+Essas passagens criam ligações laterais permanentes na geometria, que devem compartilhar os esforços entre fileiras. Isso não mede rigidez nem garante estabilidade durante todas as etapas da impressão. As curvas também precisam resistir à puxada; continuidade geométrica não garante resistência mecânica entre camadas.
+
+## Visualizar e imprimir
+
+Abra `index.html` no navegador. Funciona localmente sem internet, carregando `output_v2/preview-data.js`. Use:
+
+- **Mostrar só o cordão**: remove visualmente a base e as ligações fracas, evidenciando a continuidade.
+- **Traçar o percurso**: acompanha a linha central, em sobreposição ao modelo. O controle de progresso não simula a retirada nem a trajetória do bico.
+- **Níveis visíveis** e as vistas superior/lateral: permitem inspecionar retornos e subidas.
+- **Comparar com a versão 01**: abre a geometria anterior preservada.
+
+| Variante | Ligações fracas | Suporte para imprimir | Com peça de teste |
 |---|---|---|---|
-| A — fina | 0,45 × 0,45 mm | [A_fina_suporte.stl](output/A_fina_suporte.stl) | [A_fina_conjunto.stl](output/A_fina_conjunto.stl) |
-| B — média | 0,60 × 0,60 mm | [B_media_suporte.stl](output/B_media_suporte.stl) | [B_media_conjunto.stl](output/B_media_conjunto.stl) |
-| C — forte | 0,80 × 0,80 mm | [C_forte_suporte.stl](output/C_forte_suporte.stl) | [C_forte_conjunto.stl](output/C_forte_conjunto.stl) |
+| A — fina | 0,45 × 0,45 mm | [A_fina_suporte.stl](output_v2/A_fina_suporte.stl) | [A_fina_conjunto.stl](output_v2/A_fina_conjunto.stl) |
+| B — média | 0,60 × 0,60 mm | [B_media_suporte.stl](output_v2/B_media_suporte.stl) | [B_media_conjunto.stl](output_v2/B_media_conjunto.stl) |
+| C — forte | 0,80 × 0,80 mm | [C_forte_suporte.stl](output_v2/C_forte_suporte.stl) | [C_forte_conjunto.stl](output_v2/C_forte_conjunto.stl) |
 
-Comece pelo **B_media_suporte.stl**, sem a peça por cima, para testar a fabricação dos cordões e a possibilidade de desfiá-los. Depois compare A e C nas mesmas condições. Use o conjunto com a peça para avaliar acesso, retirada e acabamento inferior numa segunda rodada.
+Comece pelo suporte isolado da variante B. As três variantes têm os mesmos retornos de espessura integral; somente os pontos fracos entre níveis variam. Os arquivos `*_cordao_sem_ligacoes.stl` servem para inspecionar a continuidade. **Não são o corpo de prova a imprimir**: não incluem a base e os apoios previstos para a fabricação.
 
-Os STLs usam milímetros. O suporte mede **25,6 × 12,8 × 17,6 mm**, com 4 fileiras, 4 níveis e 40 ligações. A base de 0,4 mm une as fileiras para impressão; ela não foi projetada para desfiar. A peça de teste é um pequeno pórtico com duas paredes apoiadas na mesa e teto de 1,2 mm. O conjunto mede **28,8 × 12,8 × 19 mm**. Há folga vertical nominal de **0,2 mm** entre os picos do suporte e o teto.
+Dimensões externas do suporte: **28,7 × 12,8 × 17,6 mm**. Com a peça de teste: **31,9 × 12,8 × 19 mm**. As curvas laterais exigiram ampliar a base e afastar as paredes da peça. A folga nominal sob o teto continua sendo 0,2 mm.
 
-## Fatiamento
+## Configuração de fatiamento
 
-1. Importe o STL em escala de 100%, na orientação fornecida, com a base na mesa. Não use orientação automática.
-2. Use seu perfil já calibrado para PETG e sua impressora, com bico de 0,4 mm, camada inicial de 0,2 mm e demais camadas de 0,2 mm. Mantenha temperatura, ventilação e velocidade iguais entre A, B e C.
-3. **Desative suportes automáticos.** A geometria experimental já está modelada como um objeto; suportes extras preencheriam os vazios que permitem desfazê-la.
-4. Como ponto inicial, use largura de linha de 0,4 mm, 2 paredes, 100% de preenchimento e 4 camadas de topo/fundo. Habilite a preservação de paredes finas/preenchimento de lacunas conforme seu fatiador. Esses nomes e seus efeitos variam entre programas.
-5. Na prévia, confira as ligações nas alturas de impressão **4,6/4,8 mm**, **9,0/9,2 mm** e **13,4/13,6 mm**. Elas precisam conter extrusão. A largura nominal das três versões pode ser parcialmente igualada pela largura mínima de linha do fatiador.
-6. Para o teste com teto, importe o arquivo `conjunto` como um só modelo. Ele contém dois sólidos intencionalmente separados: suporte e peça. Não separe e reorganize suas partes, nem abaixe o teto. Confira a camada de folga e as pontes sob o teto.
+1. Importe o STL em milímetros, escala 100%, na orientação fornecida. Preserve a base apoiada na mesa.
+2. Use seu perfil calibrado de PETG, com bico de 0,4 mm, camada inicial e demais camadas de 0,2 mm. Não altere temperatura, ventilação ou velocidade entre variantes durante a comparação.
+3. **Desative os suportes automáticos**: a estrutura já está modelada. Suportes extras preencheriam os vazios necessários para removê-la.
+4. Ponto inicial: linhas de 0,4 mm, 2 paredes, preenchimento de 100%, 4 camadas de topo e fundo. Preserve paredes finas/lacunas conforme o seu fatiador.
+5. Confira as ligações em Z = 4,6/4,8; 9,0/9,2; 13,4/13,6 mm e a presença de todas as curvas nas pontas. Larguras pequenas podem ser aproximadas à mesma largura de extrusão pelo fatiador.
+6. Ao imprimir `*_conjunto.stl`, mantenha as duas cascas como um modelo, sem reorganizar suas partes. Há dois sólidos intencionalmente separados: suporte e peça. Preserve a folga sob o teto.
 
-Não redimensione simplesmente o STL para calibrar a remoção: isso mudaria simultaneamente cordão, pescoço, folgas e alturas. Modifique os parâmetros e gere novamente.
+As curvas horizontais de níveis superiores incluem pequenas pontes entre fileiras. O teste de início de camadas não valida a qualidade dessas pontes nem a ordem exata em que o seu fatiador vai imprimi-las.
 
-## Teste com alicate
+## Teste físico
 
-Deixe o corpo de prova esfriar e retire-o da mesa. Segure a base ou a peça de teste; agarre uma curva externa de um cordão e puxe para fora da estrutura. Não há uma ponta obrigatória. Comece nas regiões externas acessíveis e experimente outras direções. Se romper, pegue outro trecho.
+Após esfriar e retirar o modelo da mesa, segure a base e agarre uma curva acessível com o alicate. Puxe para fora da estrutura, observe se os pontos fracos cedem em sequência e acompanhe se o cordão consegue passar pelo retorno horizontal e pela curva vertical. Caso rompa, agarre outro trecho.
 
-Observe se os pescoços cedem sucessivamente ou se o próprio cordão rompe imediatamente. Compare:
+Compare A, B e C: sucesso da impressão, tempo e número de puxadas, comprimento dos segmentos retirados, localização das rupturas e eventual saída de blocos inteiros. Se quebrar sempre nos retornos, a próxima revisão deve ajustar seção ou raio dessas curvas. Se quebrar no cordão antes de soltar os pontos de união, compare a variante A.
 
-| Medição | A | B | C |
-|---|---|---|---|
-| Terminou a impressão sem colapso? | | | |
-| Tempo de remoção | | | |
-| Número de puxadas | | | |
-| Maior trecho retirado, em mm | | | |
-| Rompeu mais no cordão ou na ligação? | | | |
-| Com teto: resíduos/danos na peça | | | |
+A base permanece inteira. O teto é uma peça plana para ensaio; esta versão não implementa uma interface densa desfiável nem gera suportes para modelos arbitrários.
 
-Se os cordões quebrarem antes das ligações, priorize A ou aumente a seção dos cordões numa próxima versão. Se a estrutura falhar durante a impressão, experimente C e confira primeiro a presença das ligações na prévia. Se ela sair em blocos rígidos, o mecanismo de desfiamento ainda não foi alcançado.
+## Reproduzir e validar
 
-## Gerador e reprodução
-
-Python 3.12 foi usado nesta implementação. As dependências estão fixadas em `requirements.txt`; a pasta `.venv` contém o ambiente local instalado.
+Ambiente usado: Python 3.12, dependências fixadas em `requirements.txt`.
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe generate.py
-.\.venv\Scripts\python.exe validate_slicing.py
+.\.venv\Scripts\python.exe generate_v2.py
+.\.venv\Scripts\python.exe validate_slicing.py --out output_v2
+.\.venv\Scripts\python.exe validate_v2.py
 ```
 
-Para experimentar outra geometria, copie `output/config.json`, edite os campos e execute:
+`generate_v2.py --config minha_config.json --out outra_pasta` aceita os campos de `output_v2/config.json`. Esta versão exige um número par de fileiras e raio vertical suficiente para a seção do cordão. O visualizador e `validate_v2.py` usam `output_v2` como pasta padrão. Não redimensione o STL para calibrar uma única dimensão; regenere os parâmetros.
 
-```powershell
-.\.venv\Scripts\python.exe generate.py --config minha_config.json --out experimento_02
-.\.venv\Scripts\python.exe validate_slicing.py --out experimento_02
-```
+Evidências disponíveis:
 
-O visualizador padrão usa os arquivos de `output`; gerar outra pasta não muda a visualização padrão. As três larguras de ligação são fixas no gerador desta versão. A configuração permite mudar seção dos cordões, amplitude lateral, elevação, passo, número de fileiras/níveis/períodos e folgas. Alterar o bico para algo incompatível com as ligações gera erro em vez de produzir uma peça silenciosamente inválida.
+- `output_v2/validation.json`: malhas fechadas e orientadas, volume positivo, sem faces degeneradas, um componente no cordão principal e no suporte; dois componentes no conjunto, sem interferência com a peça. Verificação da cadeia por interseções volumétricas reais entre os trechos.
+- `output_v2/audit/slicing_validation.json`: 88 camadas examinadas por variante, sem ilhas nascendo sem sobreposição alguma com a camada anterior. CuraEngine 4.13.1 preservou as 80 amostras de ligações por variante, sem avisos de faces sobrepostas ou camadas vazias no suporte e no conjunto.
+- `output_v2/audit/return_validation.json`: **687 amostras das curvas por variante** encontram extrusão próxima na camada correspondente. Distância máxima observada ao centro de uma linha: 0,247 mm; limite de verificação: 0,30 mm. Esse teste confirma a presença de material nas curvas, sem simular sua resistência.
 
-## Validação e limites
+Os G-codes em `audit/` foram produzidos com uma máquina genérica para inspeção. Para imprimir, gere o G-code dos STLs usando o perfil da sua impressora.
 
-`output/validation.json` registra a auditoria das malhas, incluindo releitura dos STLs: superfície fechada, orientação consistente, volume positivo, ausência de faces degeneradas, um componente por suporte e dois no conjunto. Não há interseção volumétrica entre suporte e peça. A simplificação superficial tem tolerância de 0,02 mm, seguida de limpeza numérica.
-
-`output/audit/slicing_validation.json` registra a checagem das 88 camadas do suporte e a presença de extrusão em 80 amostras de ligação por variante usando **CuraEngine 4.13.1**. A checagem geométrica exige que cada ilha tenha alguma sobreposição com a camada anterior; isso não demonstra apoio integral de cada trajetória, resistência lateral ou qualidade de pontes.
-
-Os arquivos `output/audit/*_NAO_IMPRIMIR.gcode` são evidência técnica de fatiamento com máquina genérica, sem inicialização/finalização específica. **Para imprimir, fatie os STLs com o perfil da sua própria impressora.**
-
-Não houve ensaio físico, medição de força, simulação mecânica ou validação de tempo de remoção. A boa continuidade geométrica de um cordão não garante resistência igual em todas as direções, pois a peça continua sendo impressa em camadas. O teto é uma peça plana para ensaio; esta versão ainda não tem uma interface densa desfiável dedicada nem gera suporte automaticamente a partir de uma peça arbitrária. A base permanece inteira. O experimento avalia primeiro o mecanismo de remoção do corpo do suporte.
+**Ainda não houve teste físico de estabilidade, força ou desfiamento.** Todas as verificações acima são geométricas ou de fatiamento.
